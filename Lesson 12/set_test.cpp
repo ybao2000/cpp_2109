@@ -12,5 +12,9 @@ int main() {
     cin >> a;
     us.insert(a);
   }
-  cout << us.size() << endl;
+  // for (int x : us){
+  //   cout << x << "\n";
+  // }
+  auto it = us.begin();
+  cout << *it << endl;  // this is giving you the first one
 }
