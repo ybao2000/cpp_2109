@@ -207,6 +207,8 @@ class Hand {
 
   vector<iPair> getGroups() {return _groups;}
 
+  Card getHighestCard() {return _cards[0];}
+
   void show() {
     wcout << _player << " : " << strCards() << " , " << strRank() << endl;
   }
@@ -239,10 +241,16 @@ vector<Card> deal() {
 }
 
 bool compare_card(Card card1, Card card2) {
-  return card1.getNumber() > card2.getNumber();
+  int n1 = card1.getNumber();
+  int n2 = card2.getNumber();
+  if (n1 > n2) return true;
+  else if(n1 < n2) return false;
+  else {
+    return card1.getSuit() > card2.getSuit();
+  }
 }
 
-bool compare_groups(vector<iPair> groups1, vector<iPair> groups2) {
+bool compare_groups(vector<iPair> groups1, vector<iPair> groups2, Card c1, Card c2) {
   int len1 = groups1.size();
   int len2 = groups2.size();
   for(int i=0; i<len1; i++){
@@ -253,16 +261,19 @@ bool compare_groups(vector<iPair> groups1, vector<iPair> groups2) {
       return false;
     }
   }
-  return true;
+  // for the first group, compare the suit
+  return compare_card(c1, c2);
 }
 
 bool compare_hand(Hand h1, Hand h2) {
   Rank r1 = h1.getRank();
   Rank r2 = h2.getRank();
+  Card c1 = h1.getHighestCard();
+  Card c2 = h2.getHighestCard();
   if (r1 > r2) return true;
   else if(r1 < r2) return false;
   else {
-    return compare_groups(h1.getGroups(), h2.getGroups());
+    return compare_groups(h1.getGroups(), h2.getGroups(), c1, c2);
   }
 }
 
