@@ -202,9 +202,17 @@ class Hand {
     else if(isOnePair()) _rank = OnePair;
     else _rank = HighHand;
   }
+  
+  Rank getRank() { return _rank;}
+
+  vector<iPair> getGroups() {return _groups;}
 
   void show() {
     wcout << _player << " : " << strCards() << " , " << strRank() << endl;
+  }
+
+  wstring getPlayer() {
+    return _player;
   }
 };
 
@@ -234,6 +242,30 @@ bool compare_card(Card card1, Card card2) {
   return card1.getNumber() > card2.getNumber();
 }
 
+bool compare_groups(vector<iPair> groups1, vector<iPair> groups2) {
+  int len1 = groups1.size();
+  int len2 = groups2.size();
+  for(int i=0; i<len1; i++){
+    if(groups1[i].second > groups2[i].second) {
+      return true;
+    }
+    else if(groups1[i].second < groups2[i].second) {
+      return false;
+    }
+  }
+  return true;
+}
+
+bool compare_hand(Hand h1, Hand h2) {
+  Rank r1 = h1.getRank();
+  Rank r2 = h2.getRank();
+  if (r1 > r2) return true;
+  else if(r1 < r2) return false;
+  else {
+    compare_groups(h1.getGroups(), h2.getGroups());
+  }
+}
+
 int main() {
   _setmode(_fileno(stdout), _O_U16TEXT);  
   vector<Card> shuffled = deal(); 
@@ -249,15 +281,23 @@ int main() {
     hands.push_back(hand);
     it_begin = it_end;
   }
-  // Card c1 = Card(Heart, 12);
-  // wcout << c1.to_string();
-  // vector<Card> cards;
-  // cards.push_back(Card(Heart, 14));
-  // cards.push_back(Card(Club, 12));
-  // cards.push_back(Card(Heart, 11));
-  // cards.push_back(Card(Heart, 9));   
-  // cards.push_back(Card(Heart, 8));
-  // Hand h = Hand(L"Player 1", cards);  
-  // h.setRank(); 
-  // h.show();  
+  bool c01 = compare_hand(hands[0], hands[1]);
+  bool c02 = compare_hand(hands[0], hands[2]);
+  bool c03 = compare_hand(hands[0], hands[3]);
+  bool c12 = compare_hand(hands[1], hands[2]);    
+  bool c13 = compare_hand(hands[1], hands[3]);    
+  bool c23 = compare_hand(hands[2], hands[3]);  
+  if (c01 && c02 && c03) {
+    // player 1 wins!
+    wcout << hands[0].getPlayer() << " wins!\n";
+  }  
+  else if(!c01 && c12 && c13) {
+    wcout << hands[1].getPlayer() << " wins!\n";
+  }
+  else if(!c02 && !c12 && c23) {
+      wcout << hands[2].getPlayer() << " wins!\n";  
+  }
+  else {
+      wcout << hands[3].getPlayer() << " wins!\n";      
+  }
 }
