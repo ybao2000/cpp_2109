@@ -262,7 +262,7 @@ bool compare_hand(Hand h1, Hand h2) {
   if (r1 > r2) return true;
   else if(r1 < r2) return false;
   else {
-    compare_groups(h1.getGroups(), h2.getGroups());
+    return compare_groups(h1.getGroups(), h2.getGroups());
   }
 }
 
