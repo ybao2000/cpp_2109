@@ -207,7 +207,12 @@ class Hand {
 
   vector<iPair> getGroups() {return _groups;}
 
-  Card getHighestCard() {return _cards[0];}
+  Card getHighestCard() {
+    for(auto card : _cards) {
+      if(card.getNumber() == _groups[0].second) return card;
+    }
+    return _cards[0];
+  }
 
   void show() {
     wcout << _player << " : " << strCards() << " , " << strRank() << endl;
