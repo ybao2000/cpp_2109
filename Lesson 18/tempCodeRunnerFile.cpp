@@ -1,0 +1,1 @@
+  cout << "My name is " << name << ". I am " << age << " years' old. I am " << height << " and I am a " << (sex ? "boy" : "girl") << endl;
